@@ -32,7 +32,7 @@ use sethink\swooleRedis\map\CoRedisMap;
  * @method CoRedis incrByFloat(string $key, float $increment)
  * @method CoRedis decr(string $key)
  * @method CoRedis decrBy(string $key, int $increment)
- * @method CoRedis mGet(array ... $keys)
+ * @method CoRedis mget(array ... $keys)
  * @method CoRedis append(string $key, string $value)
  * @method CoRedis getRange(string $key, int $start, int $end)
  * @method CoRedis setRange(string $key, int $offset, string $value)
