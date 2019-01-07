@@ -2,9 +2,9 @@
 
 namespace Demo;
 
-include_once "./src/RedisCo.php";
+include_once "./src/CoRedis.php";
 include_once "./src/RedisPool.php";
-include_once "./src/map/RedisCoMap.php";
+include_once "./src/map/CoRedisMap.php";
 
 use swoole;
 use sethink\swooleRedis\CoRedis;
