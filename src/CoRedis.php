@@ -14,6 +14,7 @@ use sethink\swooleRedis\map\CoRedisMap;
  *
  * //base
  * @method CoRedis expire(string $key, int $ttl)
+ * @method CoRedis keys(string $key);
  *
  *
  * //string
