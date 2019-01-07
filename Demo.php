@@ -50,6 +50,8 @@ class Demo
         ];
         $this->RedisPool = new RedisPool($config);
         unset($config);
+
+        $this->RedisPool->clearTimer($this->server);
     }
 
     public function onRequest($request, $response)
