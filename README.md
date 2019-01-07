@@ -63,6 +63,9 @@ class Demo
         ];
         $this->RedisPool = new RedisPool($config);
         unset($config);
+        
+        //定时器，清除空闲连接
+        $this->RedisPool->clearTimer($this->server);
     }
 
     public function onRequest($request, $response)
