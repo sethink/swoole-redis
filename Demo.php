@@ -7,7 +7,7 @@ include_once "./src/RedisPool.php";
 include_once "./src/map/RedisCoMap.php";
 
 use swoole;
-use sethink\swooleRedis\RedisCo;
+use sethink\swooleRedis\CoRedis;
 use sethink\swooleRedis\RedisPool;
 
 class Demo
@@ -54,11 +54,10 @@ class Demo
 
     public function onRequest($request, $response)
     {
-        $rs1 = RedisCo::init($this->RedisPool)->set('sethink', 'sethink');
+        $rs1 = CoRedis::init($this->RedisPool)->set('sethink', 'sethink');
         var_dump($rs1);
-        $rs2 = RedisCo::init($this->RedisPool)->get('sethink');
+        $rs2 = CoRedis::init($this->RedisPool)->get('sethink');
         var_dump($rs2);
-
     }
 }
 

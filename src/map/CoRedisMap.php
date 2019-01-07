@@ -5,7 +5,7 @@
 
 namespace sethink\swooleRedis\map;
 
-class RedisCoMap
+class CoRedisMap
 {
     protected $RedisPool = false;
 
