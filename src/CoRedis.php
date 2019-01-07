@@ -12,20 +12,25 @@ use sethink\swooleRedis\map\CoRedisMap;
  * @package sethink\swooleRedis
  * @method CoRedis init(string $server) static 初始化，加入server
  *
+ * //base
+ * @method CoRedis expire(string $key, int $ttl)
+ *
+ *
  * //string
  * @method CoRedis get(string $key)
- * @method CoRedis set(string $key, string $value)
- * @method CoRedis setex(string $key, int $expire, string $value)
+ * @method CoRedis set(string $key, string $value, int $timeout = 0)
+ * @method CoRedis setex(string $key, int $ttl, string $value)
  * @method CoRedis psetex(string $key, int $expire, string $value)
  * @method CoRedis setnx(string $key, string $value)
+ * @method CoRedis del(string ... $key)
  * @method CoRedis delete(string ... $key)
  * @method CoRedis getSet(string $key, string $value)
  * @method CoRedis exists(string $key)
  * @method CoRedis incr(string $key)
- * @method CoRedis incrBy(string $key, int $num)
- * @method CoRedis incrByFloat(string $key, float $num)
+ * @method CoRedis incrBy(string $key, int $increment)
+ * @method CoRedis incrByFloat(string $key, float $increment)
  * @method CoRedis decr(string $key)
- * @method CoRedis decrBy(string $key, int $num)
+ * @method CoRedis decrBy(string $key, int $increment)
  * @method CoRedis mGet(array ... $keys)
  * @method CoRedis append(string $key, string $value)
  * @method CoRedis getRange(string $key, int $start, int $end)
