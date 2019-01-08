@@ -12,6 +12,21 @@ tip：
 >composer require sethink/swoole-redis
 ```
 
+# setDefer($bool)
+```
+部分操作，如果不需要返回结果，则可以设置为false。
+
+相对于$bool为true，执行后，由于主进程和协程间不需要再通信，可以立即往下执行程序
+```
+
+```php
+<?php
+//此操作不会返回结果
+CoRedis::init($this->RedisPool)
+    ->setDefer(false)
+    ->set('sethink', 'sethink');
+```
+
 # 入门例子
 ```php
 <?php
@@ -57,9 +72,11 @@ class Demo
             'host'      => '127.0.0.1',
             'port'      => 6379,
             'auth'      => 'sethink',
-            'poolMin'   => 5,
-            'clearTime' => 60000,
-            'clearAll'  => 300000,
+            'poolMin'   => 5,   //空闲时，保存的最大链接，默认为5
+            'poolMax'   => 1000,    //地址池最大连接数，默认1000
+            'clearTime' => 60000,   //清除空闲链接的定时器，默认60s
+            'clearAll'  => 300000,  //空闲多久清空所有连接,默认300s
+            'setDefer'  => true //设置是否返回结果
         ];
         $this->RedisPool = new RedisPool($config);
         unset($config);

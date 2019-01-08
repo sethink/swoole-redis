@@ -33,6 +33,8 @@ class RedisPool
         'clearTime' => 60000,
         //空闲多久清空所有连接,默认300s
         'clearAll'  => 300,
+        //设置是否返回结果
+        'setDefer'  => true
     ];
 
     public function __construct($config)

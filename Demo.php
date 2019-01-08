@@ -40,13 +40,14 @@ class Demo
 
     public function onWorkerStart($server, $worker_id)
     {
-        $config          = [
+        $config = [
             'host'      => '127.0.0.1',
             'port'      => 6379,
             'auth'      => 'sethink',
             'poolMin'   => 5,
             'clearTime' => 60000,
             'clearAll'  => 300000,
+            'setDefer'  => true
         ];
         $this->RedisPool = new RedisPool($config);
         unset($config);
@@ -56,10 +57,14 @@ class Demo
 
     public function onRequest($request, $response)
     {
-        $rs1 = CoRedis::init($this->RedisPool)->set('sethink', 'sethink');
+        $rs1 = CoRedis::init($this->RedisPool)
+            ->setDefer(false)
+            ->set('sethink', 'sethink');
         var_dump($rs1);
         $rs2 = CoRedis::init($this->RedisPool)->get('sethink');
         var_dump($rs2);
+
+        echo PHP_EOL;
     }
 }
 
