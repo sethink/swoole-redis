@@ -63,7 +63,6 @@ class Demo
         var_dump($rs1);
         $rs2 = CoRedis::init($this->RedisPool)->get('sethink');
         var_dump($rs2);
-
         echo PHP_EOL;
     }
 }

@@ -7,6 +7,18 @@ tip：
 实现redis函数的基本提示（部分函数未实现）
 ```
 
+# 版本
+## v0.0.1
+```
+1、初完成
+
+```
+## v0.0.2
+```
+1、添加setDefer -> 设置是否返回结果(默认为true。部分操作，如果不需要返回返回结果，则可以设置为false)
+
+```
+
 # 引入
 ```
 >composer require sethink/swoole-redis
