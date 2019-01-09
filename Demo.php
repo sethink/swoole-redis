@@ -63,7 +63,17 @@ class Demo
 //            ->set('sethink', 'sethink');
 //        var_dump($rs1);
         $rs2 = CoRedis::init($this->RedisPool)->get('sethink');
-        var_dump($rs2);
+//        var_dump($rs2);
+
+//        $redis = CoRedis::init($this->RedisPool)->instance();
+//        CoRedis::init($this->RedisPool)->put($redis);
+
+//        go(function (){
+//            $redis = CoRedis::init($this->RedisPool)->instance();
+//            $rs = $redis->get('string');
+//            var_dump($rs);
+//            CoRedis::init($this->RedisPool)->put($redis);
+//        });
         echo PHP_EOL;
     }
 }

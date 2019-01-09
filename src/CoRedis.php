@@ -11,6 +11,8 @@ use sethink\swooleRedis\map\CoRedisMap;
  * Class CoRedis
  * @package sethink\swooleRedis
  * @method CoRedis init(string $server) static 初始化，加入server
+ * @method CoRedis instance();
+ * @method CoRedis put(object $redis)
  * @method CoRedis setDefer(bool $bool=true)
  *
  * //base

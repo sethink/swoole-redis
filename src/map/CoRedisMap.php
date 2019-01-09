@@ -19,6 +19,37 @@ class CoRedisMap
         return $this;
     }
 
+    public function instance()
+    {
+        $re_i = -1;
+
+        back:
+        $re_i++;
+
+        $redis = $this->RedisPool->get();
+
+        if ($redis->connected) {
+            return $redis;
+        } else {
+            if ($re_i <= $this->RedisPool->config['poolMin']) {
+                $redis->close();
+                unset($redis);
+                goto back;
+            }
+        }
+
+        throw new \Exception('Redis连接获取失败');
+    }
+
+    public function put($redis)
+    {
+        if ($redis instanceof \Swoole\Coroutine\Redis) {
+            $this->RedisPool->put($redis);
+        }else{
+            throw new \Exception('传入的$redis不属于该连接池');
+        }
+    }
+
     public function setDefer(bool $bool = true)
     {
         $this->options['setDefer'] = $bool;
@@ -37,21 +68,22 @@ class CoRedisMap
 
             $redis = $this->RedisPool->get();
 
-            if(!$redis->connected && $re_i <= $this->RedisPool->config['poolMin']){
-                $redis->close();
-                unset($redis);
-                goto back;
-            }
-
-            if($redis->connected){
-
+            if ($redis->connected) {
                 $rs = call_user_func_array([$redis, $method], $args);
-                $this->RedisPool->put($redis);
+                $this->put($redis);
 
                 if ($this->options['setDefer']) {
                     $chan->push($rs);
                 }
+            } else {
+                if ($re_i <= $this->RedisPool->config['poolMin']) {
+                    $redis->close();
+                    unset($redis);
+                    goto back;
+                }
             }
+
+            throw new \Exception('Redis连接获取失败');
         });
 
         if ($this->options['setDefer']) {
@@ -64,7 +96,7 @@ class CoRedisMap
         if ($this->RedisPool) {
             return $this->query($method, $args);
         } else {
-            return false;
+            throw new \Exception('请先执行init()函数');
         }
     }
 }

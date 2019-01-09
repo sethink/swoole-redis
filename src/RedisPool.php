@@ -64,7 +64,10 @@ class RedisPool
      */
     public function put($redis)
     {
-        $this->pool->push($redis);
+        //未超出池最大值时
+        if ($this->pool->length() < $this->config['poolMax']) {
+            $this->pool->push($redis);
+        }
         $this->pushTime = time();
     }
 
@@ -74,12 +77,9 @@ class RedisPool
     public function get()
     {
         if (!$this->available) {
-            return false;
+            throw new \Exception('Redis连接池正在销毁');
         }
-        //超出池最大值时
-        if ($this->pool->length() >= $this->config['poolMax']) {
-            return false;
-        }
+
         //有空闲连接且连接池处于可用状态
         if ($this->pool->length() > 0) {
             return $this->pool->pop();
@@ -103,7 +103,7 @@ class RedisPool
         if ($redis) {
             return $redis;
         } else {
-            return false;
+            throw new \Exception('Redis连接失败');
         }
     }
 

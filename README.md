@@ -24,6 +24,9 @@ tip：
 ```
 1、添加setOptions配置（swoole官方timeout设置"超时时间, 默认为全局的协程socket_timeout(-1, 永不超时)"。在使用brPop函数时，发现好似并未生效，timeout的设置必须大于brPop超时，否则会出现"Resource temporarily unavailable"）
 2、添加断线重连功能
+3、添加instance()函数，如果有特殊需求扩展无法实现，又想共用连接池时，譬如事务处理，此时可以通过instance获取一个连接
+4、添加put()函数，配合instance使用，使用完连接后，将连接put回连接池里
+5、添加异常处理
 ```
 
 # 引入
@@ -31,20 +34,7 @@ tip：
 >composer require sethink/swoole-redis
 ```
 
-# setDefer($bool)
-```
-部分操作，如果不需要返回结果，则可以设置为false。
 
-相对于$bool为true，执行后，由于主进程和协程间不需要再通信，可以立即往下执行程序
-```
-
-```php
-<?php
-//此操作不会返回结果
-CoRedis::init($this->RedisPool)
-    ->setDefer(false)
-    ->set('sethink', 'sethink');
-```
 
 # 入门例子
 ```php
@@ -116,4 +106,51 @@ class Demo
 
 new Demo();
 
+```
+
+# 详解
+## instance()
+```
+如果有特殊需求扩展无法实现，又想共用连接池时，譬如事务处理，此时可以通过instance获取一个连接
+```
+
+```php
+<?php
+go(function (){
+    $redis = CoRedis::init($this->RedisPool)->instance();
+    $rs = $redis->get('sethink');
+    var_dump($rs);
+});
+```
+
+## put($redis)
+```
+配合instance使用，使用完连接后，将连接put回连接池里。
+$redis是连接池的连接
+```
+
+```php
+<?php
+go(function (){
+    $redis = CoRedis::init($this->RedisPool)->instance();
+    $rs = $redis->get('sethink');
+    var_dump($rs);
+    CoRedis::init($redis);
+});
+```
+
+
+## setDefer($bool)
+```
+部分操作，如果不需要返回结果，则可以设置为false。
+
+相对于$bool为true，执行后，由于主进程和协程间不需要再通信，可以立即往下执行程序
+```
+
+```php
+<?php
+//此操作不会返回结果
+CoRedis::init($this->RedisPool)
+    ->setDefer(false)
+    ->set('sethink', 'sethink');
 ```
