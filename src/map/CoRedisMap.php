@@ -30,15 +30,27 @@ class CoRedisMap
         $chan = new \chan(1);
 
         go(function () use ($chan, $method, $args) {
+            $re_i = -1;
+
+            back:
+            $re_i++;
+
             $redis = $this->RedisPool->get();
 
-            $rs = call_user_func_array([$redis, $method], $args);
+            if(!$redis->connected && $re_i <= $this->RedisPool->config['poolMin']){
+                $redis->close();
+                unset($redis);
+                goto back;
+            }
 
-            $this->RedisPool->put($redis);
+            if($redis->connected){
 
+                $rs = call_user_func_array([$redis, $method], $args);
+                $this->RedisPool->put($redis);
 
-            if ($this->options['setDefer']) {
-                $chan->push($rs);
+                if ($this->options['setDefer']) {
+                    $chan->push($rs);
+                }
             }
         });
 

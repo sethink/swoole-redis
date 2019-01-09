@@ -58,10 +58,10 @@ class Demo
 
     public function onRequest($request, $response)
     {
-        $rs1 = CoRedis::init($this->RedisPool)
-            ->setDefer(false)
-            ->set('sethink', 'sethink');
-        var_dump($rs1);
+//        $rs1 = CoRedis::init($this->RedisPool)
+//            ->setDefer(false)
+//            ->set('sethink', 'sethink');
+//        var_dump($rs1);
         $rs2 = CoRedis::init($this->RedisPool)->get('sethink');
         var_dump($rs2);
         echo PHP_EOL;
