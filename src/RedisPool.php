@@ -100,10 +100,10 @@ class RedisPool
 
         $this->addPoolTime = time();
 
-        if ($redis) {
+        if ($redis->errCode === 0) {
             return $redis;
         } else {
-            throw new \Exception('Redis连接失败');
+            throw new \Exception($redis->errMsg);
         }
     }
 

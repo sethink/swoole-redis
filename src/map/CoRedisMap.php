@@ -50,7 +50,7 @@ class CoRedisMap
         }
     }
 
-    public function setDefer(bool $bool = true)
+    public function setDefer($bool = true)
     {
         $this->options['setDefer'] = $bool;
         return $this;
@@ -81,9 +81,9 @@ class CoRedisMap
                     unset($redis);
                     goto back;
                 }
-            }
 
-            throw new \Exception('Redis连接获取失败');
+                throw new \Exception('Redis连接获取失败');
+            }
         });
 
         if ($this->options['setDefer']) {
