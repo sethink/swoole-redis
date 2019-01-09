@@ -98,7 +98,7 @@ class Demo
             'setDefer'        => true, //设置是否返回结果
             //options设置
             'connect_timeout' => 1, //连接超时时间，默认为1s
-            'timeout'         => 5, //超时时间，默认为1s
+            'timeout'         => 1, //超时时间，默认为1s
             'serialize'       => false, //自动序列化，默认false
             'reconnect'       => 1  //自动连接尝试次数，默认为1次
         ];
