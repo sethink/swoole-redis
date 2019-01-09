@@ -47,7 +47,8 @@ class Demo
             'poolMin'   => 5,
             'clearTime' => 60000,
             'clearAll'  => 300000,
-            'setDefer'  => true
+            'setDefer'  => true,
+            'timeout' => 5
         ];
         $this->RedisPool = new RedisPool($config);
         unset($config);

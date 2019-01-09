@@ -5,7 +5,7 @@
 
 namespace sethink\swooleRedis;
 
-use swoole;
+use Swoole;
 
 class RedisPool
 {
@@ -20,21 +20,27 @@ class RedisPool
     //配置
     public $config = [
         //服务器地址
-        'host'      => '127.0.0.1',
+        'host'            => '127.0.0.1',
         //端口
-        'port'      => 6379,
+        'port'            => 6379,
         //密码
-        'auth'      => '',
+        'auth'            => '',
         //空闲时，保存的最大链接，默认为5
-        'poolMin'   => 5,
+        'poolMin'         => 5,
         //地址池最大连接数，默认1000
-        'poolMax'   => 1000,
+        'poolMax'         => 1000,
         //清除空闲链接的定时器，默认60s
-        'clearTime' => 60000,
+        'clearTime'       => 60000,
         //空闲多久清空所有连接,默认300s
-        'clearAll'  => 300,
+        'clearAll'        => 300,
         //设置是否返回结果
-        'setDefer'  => true
+        'setDefer'        => true,
+
+        //options配置
+        'connect_timeout' => 1, //连接超时时间，默认为1s
+        'timeout'         => 1, //超时时间，默认为1s
+        'serialize'       => false, //自动序列化，默认false
+        'reconnect'       => 1  //自动连接尝试次数，默认为1次
     ];
 
     public function __construct($config)
@@ -79,7 +85,13 @@ class RedisPool
             return $this->pool->pop();
         }
         //无空闲连接，创建新连接
-        $redis = new Swoole\Coroutine\Redis();
+        $redis = new Swoole\Coroutine\Redis([
+            'connect_timeout' => $this->config['connect_timeout'],
+            'timeout'         => $this->config['timeout'],
+            'serialize'       => $this->config['serialize'],
+            'reconnect'       => $this->config['reconnect']
+        ]);
+
         $redis->connect($this->config['host'], $this->config['port']);
 
         if (!empty($this->config['auth'])) {

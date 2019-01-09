@@ -20,6 +20,12 @@ tip：
 
 ```
 
+## v0.0.3
+```
+1、添加setOptions配置（swoole官方timeout设置"超时时间, 默认为全局的协程socket_timeout(-1, 永不超时)"。在使用brPop函数时，发现好似并未生效，timeout的设置必须大于brPop超时，否则会出现"Resource temporarily unavailable"）
+
+```
+
 # 引入
 ```
 >composer require sethink/swoole-redis
@@ -61,10 +67,10 @@ class Demo
 
         $this->server = new Swoole\Http\Server("0.0.0.0", 9501);
         $this->server->set(array(
-            'worker_num'    => 4,
-            'max_request'   => 50000,
-            'reload_async'  => true,
-            'max_wait_time' => 30,
+            'worker_num'      => 4,
+            'max_request'     => 50000,
+            'reload_async'    => true,
+            'max_wait_time'   => 30
         ));
         $this->server->on('Start', function ($server) {
         });
@@ -82,14 +88,19 @@ class Demo
     public function onWorkerStart($server, $worker_id)
     {
         $config          = [
-            'host'      => '127.0.0.1',
-            'port'      => 6379,
-            'auth'      => 'sethink',
-            'poolMin'   => 5,   //空闲时，保存的最大链接，默认为5
-            'poolMax'   => 1000,    //地址池最大连接数，默认1000
-            'clearTime' => 60000,   //清除空闲链接的定时器，默认60s
-            'clearAll'  => 300000,  //空闲多久清空所有连接,默认300s
-            'setDefer'  => true //设置是否返回结果
+            'host'            => '127.0.0.1',
+            'port'            => 6379,
+            'auth'            => 'sethink',
+            'poolMin'         => 5,   //空闲时，保存的最大链接，默认为5
+            'poolMax'         => 1000,    //地址池最大连接数，默认1000
+            'clearTime'       => 60000,   //清除空闲链接的定时器，默认60s
+            'clearAll'        => 300000,  //空闲多久清空所有连接,默认300s
+            'setDefer'        => true, //设置是否返回结果
+            //options设置
+            'connect_timeout' => 1, //连接超时时间，默认为1s
+            'timeout'         => 5, //超时时间，默认为1s
+            'serialize'       => false, //自动序列化，默认false
+            'reconnect'       => 1  //自动连接尝试次数，默认为1次
         ];
         $this->RedisPool = new RedisPool($config);
         unset($config);
