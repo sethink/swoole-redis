@@ -78,6 +78,7 @@ class Demo
             'port'            => 6379,
             'auth'            => 'sethink',
             'poolMin'         => 5,   //空闲时，保存的最大链接，默认为5
+            'poolMax'         => 1000,    //地址池最大连接数，默认1000
             'clearTime'       => 60000,   //清除空闲链接的定时器，默认60s
             'clearAll'        => 300000,  //空闲多久清空所有连接,默认300s
             'setDefer'        => true, //设置是否返回结果
