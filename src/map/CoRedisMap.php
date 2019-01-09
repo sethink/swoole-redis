@@ -37,7 +37,7 @@ class CoRedisMap
                 goto back;
             }
 
-            throw new \Exception('Redis连接获取失败');
+            throw new \RuntimeException('Redis连接获取失败');
         }
 
     }
@@ -47,7 +47,7 @@ class CoRedisMap
         if ($redis instanceof \Swoole\Coroutine\Redis) {
             $this->RedisPool->put($redis);
         }else{
-            throw new \Exception('传入的$redis不属于该连接池');
+            throw new \RuntimeException('传入的$redis不属于该连接池');
         }
     }
 
@@ -83,7 +83,7 @@ class CoRedisMap
                     goto back;
                 }
 
-                throw new \Exception('Redis连接获取失败');
+                throw new \RuntimeException('Redis连接获取失败');
             }
         });
 
@@ -97,7 +97,7 @@ class CoRedisMap
         if ($this->RedisPool) {
             return $this->query($method, $args);
         } else {
-            throw new \Exception('请先执行init()函数');
+            throw new \RuntimeException('请先执行init()函数');
         }
     }
 }

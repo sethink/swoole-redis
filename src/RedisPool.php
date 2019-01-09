@@ -77,7 +77,7 @@ class RedisPool
     public function get()
     {
         if (!$this->available) {
-            throw new \Exception('Redis连接池正在销毁');
+            throw new \RuntimeException('Redis连接池正在销毁');
         }
 
         //有空闲连接且连接池处于可用状态
@@ -99,11 +99,10 @@ class RedisPool
         }
 
         $this->addPoolTime = time();
-
         if ($redis->errCode === 0) {
             return $redis;
         } else {
-            throw new \Exception($redis->errMsg);
+            throw new \RuntimeException($redis->errMsg);
         }
     }
 
