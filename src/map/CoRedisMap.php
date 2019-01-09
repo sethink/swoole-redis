@@ -36,9 +36,10 @@ class CoRedisMap
                 unset($redis);
                 goto back;
             }
+
+            throw new \Exception('Redis连接获取失败');
         }
 
-        throw new \Exception('Redis连接获取失败');
     }
 
     public function put($redis)
