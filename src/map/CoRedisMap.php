@@ -21,32 +21,14 @@ class CoRedisMap
 
     public function instance()
     {
-        $re_i = -1;
-
-        back:
-        $re_i++;
-
-        $redis = $this->RedisPool->get();
-
-        if ($redis->connected) {
-            return $redis;
-        } else {
-            if ($re_i <= $this->RedisPool->config['poolMin']) {
-                $redis->close();
-                unset($redis);
-                goto back;
-            }
-
-            throw new \RuntimeException('Redis连接获取失败');
-        }
-
+        return $this->RedisPool->get();
     }
 
     public function put($redis)
     {
         if ($redis instanceof \Swoole\Coroutine\Redis) {
             $this->RedisPool->put($redis);
-        }else{
+        } else {
             throw new \RuntimeException('传入的$redis不属于该连接池');
         }
     }
