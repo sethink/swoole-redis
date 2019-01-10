@@ -76,33 +76,48 @@ class RedisPool
      */
     public function get()
     {
+        $re_i = -1;
+
+        back:
+        $re_i++;
+
         if (!$this->available) {
-            throw new \RuntimeException('Redis连接池正在销毁');
+            $this->dumpException('Redis连接池正在销毁');
         }
 
         //有空闲连接且连接池处于可用状态
         if ($this->pool->length() > 0) {
-            return $this->pool->pop();
+            $redis = $this->pool->pop();
+        } else {
+            //无空闲连接，创建新连接
+            $redis = new Swoole\Coroutine\Redis([
+                'connect_timeout' => $this->config['connect_timeout'],
+                'timeout'         => $this->config['timeout'],
+                'serialize'       => $this->config['serialize'],
+                'reconnect'       => $this->config['reconnect']
+            ]);
+
+            $redis->connect($this->config['host'], $this->config['port']);
+
+            if (!empty($this->config['auth'])) {
+                $redis->auth($this->config['auth']);
+            }
+
+            $this->addPoolTime = time();
         }
-        //无空闲连接，创建新连接
-        $redis = new Swoole\Coroutine\Redis([
-            'connect_timeout' => $this->config['connect_timeout'],
-            'timeout'         => $this->config['timeout'],
-            'serialize'       => $this->config['serialize'],
-            'reconnect'       => $this->config['reconnect']
-        ]);
 
-        $redis->connect($this->config['host'], $this->config['port']);
-
-        if (!empty($this->config['auth'])) {
-            $redis->auth($this->config['auth']);
-        }
-
-        $this->addPoolTime = time();
-        if ($redis->errCode === 0) {
+        if ($redis->connected === true && $redis->errCode === 0) {
             return $redis;
         } else {
-            throw new \RuntimeException($redis->errMsg);
+            if ($re_i <= $this->config['poolMin']) {
+                $this->dumpError("重连次数{$re_i}，[errCode：{$redis->errCode}，errMsg：{$redis->errMsg}]");
+
+                $redis->close();
+                unset($redis);
+                goto back;
+            }
+
+            $this->dumpException('Redis重连失败');
         }
     }
 
@@ -123,6 +138,28 @@ class RedisPool
                 }
             }
         });
+    }
+
+
+    /**
+     * @打印错误信息
+     *
+     * @param $msg
+     */
+    public function dumpError($msg)
+    {
+        var_dump(date('Y-m-d H:i:s', time()) . "：{$msg}");
+    }
+
+
+    /**
+     * @抛出异常
+     *
+     * @param $msg
+     */
+    public function dumpException($msg)
+    {
+        throw new \RuntimeException(date('Y-m-d H:i:s', time()) . "：{$msg}");
     }
 
     public function destruct()

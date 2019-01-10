@@ -62,28 +62,13 @@ class CoRedisMap
         $chan = new \chan(1);
 
         go(function () use ($chan, $method, $args) {
-            $re_i = -1;
-
-            back:
-            $re_i++;
-
             $redis = $this->RedisPool->get();
 
-            if ($redis->connected) {
-                $rs = call_user_func_array([$redis, $method], $args);
-                $this->put($redis);
+            $rs = call_user_func_array([$redis, $method], $args);
+            $this->put($redis);
 
-                if ($this->options['setDefer']) {
-                    $chan->push($rs);
-                }
-            } else {
-                if ($re_i <= $this->RedisPool->config['poolMin']) {
-                    $redis->close();
-                    unset($redis);
-                    goto back;
-                }
-
-                throw new \RuntimeException('Redis连接获取失败');
+            if ($this->options['setDefer']) {
+                $chan->push($rs);
             }
         });
 
