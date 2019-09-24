@@ -16,8 +16,41 @@ use sethink\swooleRedis\map\CoRedisMap;
  * @method CoRedis setDefer(bool $bool=true)
  *
  * //base
+ * @method CoRedis ping()
+ * @method CoRedis echo(string $string)
+ * @method CoRedis randomKey()
+ * @method CoRedis select(int $tableId)
+ * @method CoRedis move(string $key,int $tableId)
+ * @method CoRedis rename(string $srcKey,String $newKey)
+ * @method CoRedis renameNx(string $srcKey,string $newKey)
  * @method CoRedis expire(string $key, int $ttl)
- * @method CoRedis keys(string $key);
+ * @method CoRedis pexpire(string $key,int $ttl)
+ * @method CoRedis expireAt(string $key,int $timestamp)
+ * @method CoRedis pexpireAt(string $key,int $timestamp)
+ * @method CoRedis keys(string $key)
+ * @method CoRedis dbSize()
+ * @method CoRedis object(string $key,string $object)
+ * @method CoRedis save()
+ * @method CoRedis bgsave()
+ * @method CoRedis lastSave()
+ * @method CoRedis type(string $type)
+ * @method CoRedis flushDB()
+ * @method CoRedis flushAll()
+ * @method CoRedis sort(string $key,$value)
+ * @method CoRedis info()
+ * @method CoRedis resetStat()
+ * @method CoRedis ttl(string $key)
+ * @method CoRedis pttl(string $key)
+ * @method CoRedis persist(string $key)
+ * @method CoRedis eval(string $luaScript)
+ * @method CoRedis evalSha(string $luaScriptSha)
+ * @method CoRedis script()
+ * @method CoRedis getLastError()
+ * @method CoRedis _prefix(string $key)
+ * @method CoRedis _unserialize(string $serialized)
+ * @method CoRedis dump(string $key)
+ * @method CoRedis restore(string $key,int $ttl,string $value)
+ * @method CoRedis time()
  *
  *
  * //string
@@ -112,6 +145,7 @@ class CoRedis
 {
     public static function __callStatic($method, $args)
     {
+
         $class = '\\sethink\\swooleRedis\\map\\CoRedisMap';
         return call_user_func_array([new $class, $method], $args);
     }

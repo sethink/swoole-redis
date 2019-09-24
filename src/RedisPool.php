@@ -25,6 +25,8 @@ class RedisPool
         'port'            => 6379,
         //密码
         'auth'            => '',
+        //数据库
+        'db'              => 0,
         //空闲时，保存的最大链接，默认为5
         'poolMin'         => 5,
         //地址池最大连接数，默认1000
@@ -103,6 +105,8 @@ class RedisPool
                 $redis->auth($this->config['auth']);
             }
 
+            $redis->select($this->config['db']);
+
             $this->addPoolTime = time();
         }
 
@@ -110,7 +114,7 @@ class RedisPool
             return $redis;
         } else {
             if ($re_i <= $this->config['poolMin']) {
-                $this->dumpError("重连次数{$re_i}，[errCode：{$redis->errCode}，errMsg：{$redis->errMsg}]");
+                $this->dumpError("redis-重连次数{$re_i}，[errCode：{$redis->errCode}，errMsg：{$redis->errMsg}]");
 
                 $redis->close();
                 unset($redis);
