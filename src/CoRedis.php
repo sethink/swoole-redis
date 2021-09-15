@@ -140,6 +140,27 @@ use sethink\swooleRedis\map\CoRedisMap;
  * @method CoRedis hIncrByFloat(string $key, string $hashKey, float $value)
  * @method CoRedis hMset(string $key, array $keyValue)
  * @method CoRedis hMGet(string $key, array $hashKeys)
+ *
+ * //stream
+ * @method CoRedis xLen(string $key)
+ * @method CoRedis xAdd(string $key, string $id, array $keyValue, array $options)
+ * @method CoRedis xRead(array $streams, array $options = [])
+ * @method CoRedis xDel(string $key, string ... $id)
+ * @method CoRedis xRange(string $key, string $start, string $end, int $count)
+ * @method CoRedis xRevRange(string $key, string $start, string $end, int $count)
+ * @method CoRedis xTrim(string $key, array $options)
+ * @method CoRedis xGroupCreate(string $key, string $groupname, string $id, bool $mkstream = false)
+ * @method CoRedis xGroupSetId(string $key, string $groupname, string $id)
+ * @method CoRedis xGroupDestroy(string $key, string $groupname)
+ * @method CoRedis xGroupCreateConsumer(string $key, string $groupname, string $consumername)
+ * @method CoRedis xGroupDelConsumer(string $key, string $groupname, string $consumername)
+ * @method CoRedis xGroupReadGroup(string $groupname, string $consumername, array $streams, array $options)
+ * @method CoRedis xPending(string $key, string $groupname, array $options)
+ * @method CoRedis xClaim(string $key, string $groupname, array $options)
+ * @method CoRedis xAutoClaim(string $key, string $groupname, string $consumer, int $min_idle_timearray, string $start, array $options)
+ * @method CoRedis xInfoConsumers(string $key, string $groupname)
+ * @method CoRedis xInfoGroups(string $key)
+ * @method CoRedis xInfoStream(string $key)
  */
 class CoRedis
 {
