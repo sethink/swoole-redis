@@ -143,11 +143,44 @@ class CoRedisMap
         'hMset',
         'hMGet'
     ];
+
+    protected $stream_array = [
+        'xAdd',
+        'xTrim',
+        'xDel',
+        'xLen',
+        'xRange',
+        'xRevRange',
+        'xRead',
+        'xGroupCreate',
+        'xGroupSetId',
+        'xGroupDestroy',
+        'xGroupCreateConsumer',
+        'xGroupDelConsumer',
+        'xReadGroup',
+        'xPending',
+        'xAck',
+        'xClaim',
+        'xAutoClaim',
+        'xPeding',
+        'xInfoConsumers',
+        'xInfoGroups',
+        'xInfoStream',
+    ];
+
     protected $key_array = [];
 
     public function __construct()
     {
-        $this->key_array = array_merge($this->sethink_array,$this->base_array,$this->string_array,$this->list_array,$this->set_array,$this->zset_array,$this->hash_array);
+        $this->key_array = array_merge($this->sethink_array,
+            $this->base_array,
+            $this->string_array,
+            $this->list_array,
+            $this->set_array,
+            $this->zset_array,
+            $this->hash_array,
+            $this->stream_array
+        );
     }
 
 
